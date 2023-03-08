@@ -1,27 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="main.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
     <title>Star Wars Trivia</title>
-</head>
-<body>
-    <main>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Star Wars Trivia-Application</h1>
         <fieldset>
-            <legend>Select a Character</legend>
-            <select id="charSelectOne">
+          <legend>Select a Character</legend>
+          <select id="charSelectOne">
             <option value="1">Luke Skywalker</option>
             <option value="12">Wilhuff Tarkin</option>
             <option value="22">Boba Fett</option>
             <option value="13">Chewbacca</option>
             <option value="16">Jabba "the Hut" Desilijic Tiure</option>
             <option value="27">General Ackbar</option>
-        </select>
-    </fieldset>
-        <article id="containerOne"></article>
+          </select>
+          <button id="lukeBtn">The Luke-btn</button>
+        </fieldset>
+      </header>
+      <main>
+        <article id="containerOne">
+          <h2 id="nameOne">Luke Skywalker</h2>
+          <div id="imgInfoOne">
+            <img
+              src="https://static.wikia.nocookie.net/starwars/images/3/3d/LukeSkywalker.png"
+              alt="picture of Luke Skywalker"
+            />
+            <ul id="infoOne">
+              <li>Haircolor: Blond</li>
+              <li>Height: 172</li>
+              <li>Weight: 77</li>
+              <li>Gender: Male</li>
+              <li>Skin: Fair</li>
+              <li>Eyes: Blue</li>
+              <li>Movies: 4</li>
+            </ul>
+          </div>
+        </article>
         <article id="containerTwo"></article>
-    </main>
-</body>
+      </main>
+    </div>
+  </body>
 </html>
