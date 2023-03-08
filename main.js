@@ -1,5 +1,3 @@
-console.log("hi");
-
 //DOM REFERENCES
 let containerOne = document.querySelector("#containerOne")
 let containerTwo = document.querySelector("#containerTwo")
@@ -10,6 +8,8 @@ let fetchData = async (peopleVal) => {
     let json = data.json();
     return json;
 };
+
+
 
 let printData = async () => {
     let data = await fetchData(charOne.value);
