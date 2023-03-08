@@ -1,0 +1,16 @@
+STAR WARS API
+
+Main Api.
+https://swapi.dev/api/
+
+--People--
+Luke Skywalker - people/1/
+Wilhuff Tarkin - people/12/
+Boba Fett - people/22/
+
+--NonPeople--
+Chewbacca - people/13/
+Jabba "the Hut" Desilijic Tiure - people/16/
+General Ackbar - people/27/
+
+
