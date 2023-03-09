@@ -3,7 +3,11 @@ let containerOne = document.querySelector("#containerOne");
 let containerTwo = document.querySelector("#containerTwo");
 let charOne = document.querySelector("#charSelectOne");
 let charTwo = document.querySelector("#charSelectTwo");
-let lukeBtn = document.querySelector("#lukeBtn");
+let nameOne = document.querySelector("#nameOne");
+let nameTwo = document.querySelector("#nameTwo");
+let imgOne = document.querySelector("#imgOne");
+let imgTwo = document.querySelector("#imgTwo");
+let compareBtn = document.querySelector("#compareBtn");
 
 //PICTURE OBJECT
 let pictures = [
@@ -39,34 +43,39 @@ let pictures = [
   },
 ];
 
-let fetchData = async (peopleVal) => {
-  let data = await fetch(`https://swapi.dev/api/people/${peopleVal}/`);
+let fetchData = async (value) => {
+  let data = await fetch(`https://swapi.dev/api/${value}`);
   let json = data.json();
   return json;
 };
 
-let fetchLuke = async () => {
-  let data = await fetch(`https://swapi.dev/api/people/1/`);
-  let json = data.json();
-  return json;
+//SHOW NAME/IMG FUNCTION
+let showNameImg = (arr, nameElem, imgElem) => {
+  nameElem.innerText = arr.name;
+  imgElem.src = arr.url;
+  imgElem.alt = `This is a picture of ${arr.name}`;
 };
 
 //PICTURE URL FUNCTION
 let getPicture = (charValue, pictureArray) => {
   let value = {};
-  pictureArray.forEach((e) => (e.id === charValue ? (value = e) : null));
+  pictureArray.forEach((e) => (e.id === +charValue ? (value = e) : null));
+  console.log(value);
   return value;
 };
+// TESTING URL FUNCTION
 
-let test = getPicture(27, pictures);
-let imgOne = document.querySelector("#imgOne");
-console.log(test);
-imgOne.src = test.url;
+// let test = getPicture(27, pictures);
+// let imgOne = document.querySelector("#imgOne");
+// console.log(test);
+// imgOne.src = test.url;
 
-lukeBtn.addEventListener("click", async () => {
-  let data = await fetchLuke();
+compareBtn.addEventListener("click", async () => {
+  let pictureOne = getPicture(charOne.value, pictures);
+  let fetchValOne = `people/${charOne.value}/`;
+  let dataOne = await fetchData(fetchValOne);
   let { name, hair_color, height, mass, gender, skin_color, eye_color, films } =
-    data;
+    dataOne;
   let one = new Character(
     name,
     gender,
@@ -75,20 +84,23 @@ lukeBtn.addEventListener("click", async () => {
     hair_color,
     skin_color,
     eye_color,
-    films
+    films,
+    pictureOne.url
   );
-  console.log(data);
+  console.log("raw data", dataOne);
+  console.log("Character", one);
   let infoOne = document.querySelector("#infoOne");
   infoOne.innerHTML = `
-      <li>New input</li>
-      <li>Haircolor: ${hair_color}</li>
-      <li>Height: ${height}</li>
-      <li>Weight: ${mass}</li>
-      <li>Gender: ${gender}</li>
-      <li>Skin: ${skin_color}</li>
-      <li>Eyes: ${eye_color}</li>
-      <li>Movies: ${films.length}</li>
+      <li>input from id:${charOne.value}</li>
+      <li>Haircolor: ${one.hairColor}</li>
+      <li>Height: ${one.height}</li>
+      <li>Weight: ${one.mass}</li>
+      <li>Gender: ${one.gender}</li>
+      <li>Skin: ${one.skinColor}</li>
+      <li>Eyes: ${one.eyeColor}</li>
+      <li>Movies: ${one.films.length}</li>
     `;
+  infoOne.classList = "";
 });
 
 class Character {
@@ -100,29 +112,33 @@ class Character {
     hairColor,
     skinColor,
     eyeColor,
-    movies,
+    films,
     pictureUrl
   ) {
     this.name = name;
     this.gender = gender;
-    this.height = height;
-    this.mass = mass;
+    this.height = +height;
+    this.mass = +mass;
     this.hairColor = hairColor;
     this.skinColor = skinColor;
     this.eyeColor = eyeColor;
-    this.movies = movies;
+    this.films = films;
     this.pictureUrl = pictureUrl;
   }
 }
 
-let printData = async () => {
-  let data = await fetchData(charOne.value);
-  console.log(data);
-  containerOne.innerHTML += `<p>${data.name}</p>`;
+let printData = async (charValue, imgUrlArr) => {
+  let data = await fetchData(charValue);
   console.log(data);
 };
 
 charOne.addEventListener("change", () => {
-  console.log("charOne reporting");
-  printData();
+  let picture = getPicture(charOne.value, pictures);
+  console.log(picture);
+  showNameImg(picture, nameOne, imgOne);
+});
+charTwo.addEventListener("change", () => {
+  let picture = getPicture(charTwo.value, pictures);
+  console.log(picture);
+  showNameImg(picture, nameTwo, imgTwo);
 });

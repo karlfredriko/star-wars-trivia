@@ -8,21 +8,25 @@ https://starwars.fandom.com/wiki/Main_Page
 
 --People--
 Luke Skywalker - people/1/ - 
-https://static.wikia.nocookie.net/starwars/images/3/3d/LukeSkywalker.png/revision/latest?cb=20201218190434
+https://static.wikia.nocookie.net/starwars/images/3/3d/LukeSkywalker.png
 
 Wilhuff Tarkin - people/12/ - 
-https://static.wikia.nocookie.net/starwars/images/c/c1/Tarkininfobox.jpg/revision/latest?cb=20100620213033
+https://static.wikia.nocookie.net/starwars/images/c/c1/Tarkininfobox.jpg
 
 Boba Fett - people/22/ - 
-https://static.wikia.nocookie.net/starwars/images/5/5e/BobaFettMain2.png/revision/latest?cb=20221003235522
+https://static.wikia.nocookie.net/starwars/images/5/5e/BobaFettMain2.png
 
 --NonPeople--
 Chewbacca - people/13/ - 
-https://static.wikia.nocookie.net/starwars/images/e/ec/ChewbaccaCSWE.jpg/revision/latest?cb=20220309054207
+https://static.wikia.nocookie.net/starwars/images/e/ec/ChewbaccaCSWE.jpg
 
 Jabba "the Hut" Desilijic Tiure - people/16/ - 
-https://static.wikia.nocookie.net/starwars/images/1/1f/JabbatheHutt-ToppsFinest2019.png/revision/latest?cb=20221001194607
+https://static.wikia.nocookie.net/starwars/images/1/1f/JabbatheHutt-ToppsFinest2019.png
 
 Ackbar - people/27/ - 
-https://static.wikia.nocookie.net/starwars/images/2/29/Admiral_Ackbar_RH.png/revision/latest?cb=20221224032123
+https://static.wikia.nocookie.net/starwars/images/2/29/Admiral_Ackbar_RH.png
+
+--HonorableMentions--
+Bib Fortuna - people/45/ -
+https://static.wikia.nocookie.net/starwars/images/1/12/BibFortuna-CEUEEd.png
 

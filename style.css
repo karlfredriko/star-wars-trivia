@@ -29,8 +29,26 @@ article {
 h2 {
   margin: auto;
 }
+img {
+  height: 255px;
+  width: 200px;
+  object-fit: cover;
+}
 article div {
   display: flex;
+}
+#two div {
+  flex-direction: row-reverse;
+}
+#nameTwo {
+  text-align: end;
+}
+fieldset {
+  display: flex;
+  justify-content: space-around;
+}
+.hidden {
+  display: none;
 }
 
 /* TEXT-COLOR-CLASSES */
