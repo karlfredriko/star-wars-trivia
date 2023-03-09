@@ -32,3 +32,14 @@ h2 {
 article div {
   display: flex;
 }
+
+/* TEXT-COLOR-CLASSES */
+.red {
+  color: red;
+}
+.orange {
+  color: orange;
+}
+.green {
+  color: green;
+}
