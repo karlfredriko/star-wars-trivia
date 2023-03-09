@@ -7,6 +7,8 @@ let nameOne = document.querySelector("#nameOne");
 let nameTwo = document.querySelector("#nameTwo");
 let imgOne = document.querySelector("#imgOne");
 let imgTwo = document.querySelector("#imgTwo");
+let ulOne = document.querySelector("#infoOne");
+let ulTwo = document.querySelector("#infoTwo");
 let compareBtn = document.querySelector("#compareBtn");
 
 //CHARACTER PROTOTYPE
@@ -25,7 +27,7 @@ class Character {
     this.name = name;
     this.gender = gender;
     this.height = +height;
-    this.mass = +mass;
+    this.mass = mass;
     this.hairColor = hairColor;
     this.skinColor = skinColor;
     this.eyeColor = eyeColor;
@@ -86,18 +88,17 @@ let showNameImg = (arr, nameElem, imgElem) => {
 let getPicture = (charValue, pictureArray) => {
   let value = {};
   pictureArray.forEach((e) => (e.id === +charValue ? (value = e) : null));
-  console.log(value);
   return value;
 };
 
-//COMPARE BUTTON
-compareBtn.addEventListener("click", async () => {
-  let pictureOne = getPicture(charOne.value, pictures);
-  let fetchValOne = `people/${charOne.value}/`;
-  let dataOne = await fetchData(fetchValOne);
+// CREATE CHARACTER
+let createCharacter = async (charValue, pictureArray) => {
+  let picture = getPicture(charValue, pictureArray);
+  let fetchVal = `people/${charValue}/`;
+  let data = await fetchData(fetchVal);
   let { name, hair_color, height, mass, gender, skin_color, eye_color, films } =
-    dataOne;
-  let one = new Character(
+    data;
+  let newChar = new Character(
     name,
     gender,
     height,
@@ -106,40 +107,44 @@ compareBtn.addEventListener("click", async () => {
     skin_color,
     eye_color,
     films,
-    pictureOne.url
+    picture.url
   );
-  console.log("raw data", dataOne);
-  console.log("Character", one);
-  let infoOne = document.querySelector("#infoOne");
-  infoOne.innerHTML = `
-      <li>input from id:${charOne.value}</li>
-      <li>Haircolor: ${one.hairColor}</li>
-      <li>Height: ${one.height}</li>
-      <li>Weight: ${one.mass}</li>
-      <li>Gender: ${one.gender}</li>
-      <li>Skin: ${one.skinColor}</li>
-      <li>Eyes: ${one.eyeColor}</li>
-      <li>Movies: ${one.films.length}</li>
-    `;
-  infoOne.classList = "";
-});
-
-//PRINTING OUT DATA?
-let printData = async (charValue, imgUrlArr) => {
-  let data = await fetchData(charValue);
-  console.log(data);
+  return newChar;
 };
+
+// PRINT INFORMATION ON DOM
+let printInfo = (character, element, id) => {
+  element.innerHTML = `
+      <li>input from id:${id}</li>
+      <li>Haircolor: ${character.hairColor}</li>
+      <li>Height: ${character.height}</li>
+      <li>Weight: ${character.mass}</li>
+      <li>Gender: ${character.gender}</li>
+      <li>Skin: ${character.skinColor}</li>
+      <li>Eyes: ${character.eyeColor}</li>
+      <li>Movies: ${character.films.length}</li>
+    `;
+  element.classList = "";
+};
+
+//COMPARE BUTTON
+compareBtn.addEventListener("click", async () => {
+  let one = await createCharacter(charOne.value, pictures);
+  let two = await createCharacter(charTwo.value, pictures);
+  console.log("character One", one);
+  console.log("character Two", two);
+  printInfo(one, ulOne, charOne.value);
+  printInfo(two, ulTwo, charTwo.value);
+});
 
 //SELECTION EVENTLISTENER
 // 1
 charOne.addEventListener("change", () => {
   let picture = getPicture(charOne.value, pictures);
-  console.log(picture);
   showNameImg(picture, nameOne, imgOne);
 });
 // 2
 charTwo.addEventListener("change", () => {
   let picture = getPicture(charTwo.value, pictures);
-  console.log(picture);
   showNameImg(picture, nameTwo, imgTwo);
 });
