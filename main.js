@@ -9,6 +9,31 @@ let imgOne = document.querySelector("#imgOne");
 let imgTwo = document.querySelector("#imgTwo");
 let compareBtn = document.querySelector("#compareBtn");
 
+//CHARACTER PROTOTYPE
+class Character {
+  constructor(
+    name,
+    gender,
+    height,
+    mass,
+    hairColor,
+    skinColor,
+    eyeColor,
+    films,
+    pictureUrl
+  ) {
+    this.name = name;
+    this.gender = gender;
+    this.height = +height;
+    this.mass = +mass;
+    this.hairColor = hairColor;
+    this.skinColor = skinColor;
+    this.eyeColor = eyeColor;
+    this.films = films;
+    this.pictureUrl = pictureUrl;
+  }
+}
+
 //PICTURE OBJECT
 let pictures = [
   {
@@ -43,6 +68,7 @@ let pictures = [
   },
 ];
 
+//API-FUNCTION
 let fetchData = async (value) => {
   let data = await fetch(`https://swapi.dev/api/${value}`);
   let json = data.json();
@@ -63,13 +89,8 @@ let getPicture = (charValue, pictureArray) => {
   console.log(value);
   return value;
 };
-// TESTING URL FUNCTION
 
-// let test = getPicture(27, pictures);
-// let imgOne = document.querySelector("#imgOne");
-// console.log(test);
-// imgOne.src = test.url;
-
+//COMPARE BUTTON
 compareBtn.addEventListener("click", async () => {
   let pictureOne = getPicture(charOne.value, pictures);
   let fetchValOne = `people/${charOne.value}/`;
@@ -103,40 +124,20 @@ compareBtn.addEventListener("click", async () => {
   infoOne.classList = "";
 });
 
-class Character {
-  constructor(
-    name,
-    gender,
-    height,
-    mass,
-    hairColor,
-    skinColor,
-    eyeColor,
-    films,
-    pictureUrl
-  ) {
-    this.name = name;
-    this.gender = gender;
-    this.height = +height;
-    this.mass = +mass;
-    this.hairColor = hairColor;
-    this.skinColor = skinColor;
-    this.eyeColor = eyeColor;
-    this.films = films;
-    this.pictureUrl = pictureUrl;
-  }
-}
-
+//PRINTING OUT DATA?
 let printData = async (charValue, imgUrlArr) => {
   let data = await fetchData(charValue);
   console.log(data);
 };
 
+//SELECTION EVENTLISTENER
+// 1
 charOne.addEventListener("change", () => {
   let picture = getPicture(charOne.value, pictures);
   console.log(picture);
   showNameImg(picture, nameOne, imgOne);
 });
+// 2
 charTwo.addEventListener("change", () => {
   let picture = getPicture(charTwo.value, pictures);
   console.log(picture);
