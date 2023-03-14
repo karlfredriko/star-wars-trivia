@@ -6,7 +6,7 @@ Använd följande API: https://swapi.dev
 
 ## Krav:
 
-- Skapa en klass som du döper till Character med egenskaperna för name, gender, height, mass,hairColor, height, skinColor, eyeColor, movies samt pictureUrl.
+- Skapa en klass som du döper till Character med egenskaperna för name, gender, height, mass,hair_color, height, skinColor, eyeColor, movies samt pictureUrl.
 - Användaren ska kunna välja två karaktärer (Karaktär 1 & 2) med hjälp av varsin lista.
 - Listorna ska bestå av minst sex namn på karaktärer från Star Wars-universumet som finns i API:et.
 - Användaren ska sedan kunna klicka på en knapp för att hämta data om karaktärerna.

@@ -14,23 +14,25 @@ let compareBtn = document.querySelector("#compareBtn");
 //CHARACTER PROTOTYPE
 class Character {
   constructor(
+    relativeId,
     name,
     gender,
     height,
     mass,
-    hairColor,
-    skinColor,
-    eyeColor,
+    hair,
+    skin,
+    eyes,
     films,
     pictureUrl
   ) {
+    this.relativeId = relativeId;
     this.name = name;
     this.gender = gender;
     this.height = +height;
     this.mass = mass;
-    this.hairColor = hairColor;
-    this.skinColor = skinColor;
-    this.eyeColor = eyeColor;
+    this.hair = hair;
+    this.skin = skin;
+    this.eyes = eyes;
     this.films = films;
     this.pictureUrl = pictureUrl;
   }
@@ -41,32 +43,32 @@ let pictures = [
   {
     id: 1,
     name: "Luke Skywalker",
-    url: "https://static.wikia.nocookie.net/starwars/images/3/3d/LukeSkywalker.png",
+    url: "assets/luke_skywalker.png",
   },
   {
     id: 12,
     name: "Wilhuff Tarkin",
-    url: "https://static.wikia.nocookie.net/starwars/images/c/c1/Tarkininfobox.jpg",
+    url: "assets/Wilhuff_Tarkin.png",
   },
   {
     id: 22,
     name: "Boba Fett",
-    url: "https://static.wikia.nocookie.net/starwars/images/5/5e/BobaFettMain2.png",
+    url: "assets/Boba_Fett.png",
   },
   {
     id: 13,
     name: "Chewbacca",
-    url: "https://static.wikia.nocookie.net/starwars/images/e/ec/ChewbaccaCSWE.jpg",
+    url: "assets/Chewbacca.png",
   },
   {
     id: 16,
-    name: "Jabba 'the Hut' Desilijic Tiure",
-    url: "https://static.wikia.nocookie.net/starwars/images/1/1f/JabbatheHutt-ToppsFinest2019.png",
+    name: "Jabba Desilijic Tiure",
+    url: "assets/Jabba__the_Hut__.png",
   },
   {
     id: 27,
     name: "Ackbar",
-    url: "https://static.wikia.nocookie.net/starwars/images/2/29/Admiral_Ackbar_RH.png",
+    url: "assets/general_ackbar.png",
   },
 ];
 
@@ -99,6 +101,7 @@ let createCharacter = async (charValue, pictureArray) => {
   let { name, hair_color, height, mass, gender, skin_color, eye_color, films } =
     data;
   let newChar = new Character(
+    charValue,
     name,
     gender,
     height,
@@ -112,39 +115,78 @@ let createCharacter = async (charValue, pictureArray) => {
   return newChar;
 };
 
-// PRINT INFORMATION ON DOM
+// PRINT INFORMATION ON DOM - !!UNUSED!!
 let printInfo = (character, element, id) => {
   element.innerHTML = `
       <li>input from id:${id}</li>
-      <li>Haircolor: ${character.hairColor}</li>
+      <li>Hair: ${character.hair}</li>
       <li>Height: ${character.height}</li>
       <li>Weight: ${character.mass}</li>
       <li>Gender: ${character.gender}</li>
-      <li>Skin: ${character.skinColor}</li>
-      <li>Eyes: ${character.eyeColor}</li>
+      <li>Skin: ${character.skin}</li>
+      <li>Eyes: ${character.eyes}</li>
       <li>Movies: ${character.films.length}</li>
     `;
   element.classList = "";
 };
 
+// CAPITALIZE FIRST LETTER
+function capitalize(s) {
+  return s[0].toUpperCase() + s.slice(1);
+}
+
+// CREATE AND APPEND LI-ELEMENT
+let createAndAppendLi = (character, pos, element) => {
+  element.innerHTML = "";
+  Object.entries(character).forEach(([key, value]) => {
+    if (!["name", "pictureUrl", "relativeId"].includes(key)) {
+      let li = document.createElement("li");
+      li.id = `${key}${pos}`;
+      if (key === "films") {
+        li.textContent = `${capitalize(`${key}`)}: ${value.length}`;
+      } else if (typeof value === "string") {
+        li.textContent = `${capitalize(`${key}`)}: ${capitalize(`${value}`)}`;
+      } else {
+        li.textContent = `${capitalize(`${key}`)}: ${value}`;
+      }
+      element.append(li);
+      console.log(`${key}: ${value}`);
+    }
+  });
+  element.classList = "";
+};
+
+// COMPARE TWO CHARACTERS
+let compare = (charOne, posOne, charTwo, posTwo) => {
+  Object.entries(charOne).forEach(([key, value]) => {
+    if ([charTwo].includes(key)) {
+      console.log(key, charTwo);
+    }
+  });
+};
+
 //COMPARE BUTTON
 compareBtn.addEventListener("click", async () => {
-  let one = await createCharacter(charOne.value, pictures);
-  let two = await createCharacter(charTwo.value, pictures);
-  console.log("character One", one);
-  console.log("character Two", two);
-  printInfo(one, ulOne, charOne.value);
-  printInfo(two, ulTwo, charTwo.value);
+  if ("0" === (charOne.value || charTwo.value)) {
+    console.log("can't compare one or none");
+  } else {
+  }
 });
 
 //SELECTION EVENTLISTENER
 // 1
-charOne.addEventListener("change", () => {
+charOne.addEventListener("change", async () => {
+  ulOne.classList = "hidden";
   let picture = getPicture(charOne.value, pictures);
   showNameImg(picture, nameOne, imgOne);
+  let one = await createCharacter(charOne.value, pictures);
+  createAndAppendLi(one, 1, ulOne);
 });
 // 2
-charTwo.addEventListener("change", () => {
+charTwo.addEventListener("change", async () => {
+  ulTwo.classList = "hidden";
   let picture = getPicture(charTwo.value, pictures);
   showNameImg(picture, nameTwo, imgTwo);
+  let two = await createCharacter(charTwo.value, pictures);
+  createAndAppendLi(two, 2, ulTwo);
 });

@@ -30,8 +30,3 @@ https://static.wikia.nocookie.net/starwars/images/2/29/Admiral_Ackbar_RH.png
 Bib Fortuna - people/45/ -
 https://static.wikia.nocookie.net/starwars/images/1/12/BibFortuna-CEUEEd.png
 
-
-Workorder 10/3
-
-skapa funktion som skapar samt appendar li-element till domen.
-det kommer bli enklare att bygga in en jämföringsfunktion i den och kolla på varje element och ge dem en klass som ändrar färgen eller dyl.
