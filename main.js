@@ -11,6 +11,8 @@ let ulOne = document.querySelector("#infoOne");
 let ulTwo = document.querySelector("#infoTwo");
 let compareBtn = document.querySelector("#compareBtn");
 let infoBox = document.querySelector("#information");
+let btnsOne = document.querySelector("#btnsOne");
+let btnsTwo = document.querySelector("#btnsTwo");
 
 //GLOBALS
 let one = {};
@@ -29,7 +31,8 @@ class Character {
     skin,
     eyes,
     films,
-    pictureUrl
+    pictureUrl,
+    homeworld
   ) {
     this.relativePos = relativePos;
     this.name = name;
@@ -41,6 +44,49 @@ class Character {
     this.eyes = eyes;
     this.films = films;
     this.pictureUrl = pictureUrl;
+    this.homeworld = homeworld;
+  }
+  async firstAppearance() {
+    let filmData = await fetchData(this.films[0]);
+    infoBox.classList = "";
+    infoBox.innerHTML = `<h3>Did You Know?</h3>
+      <p>${this.name}'s first apperence in a movie was ${filmData.release_date}, that's pretty cool!</p>`;
+  }
+  async printSharedFilms(char) {
+    let sharedFilms = [];
+    this.films.forEach((film) => {
+      if (char.films.includes(film)) {
+        sharedFilms.push(film);
+      }
+    });
+    infoBox.classList = "";
+    infoBox.innerHTML = `<h3>Did You Know?</h3>
+      <p>${this.name} and ${char.name} have been in ${sharedFilms.length} films together? Here they are:</p>`;
+    let ul = document.createElement("ul");
+    ul.classList = "info-list";
+    infoBox.append(ul);
+    for (let i = 0; i < sharedFilms.length; i++) {
+      let data = await fetchData(sharedFilms[i]);
+      let li = document.createElement("li");
+      li.textContent = data.title;
+      ul.append(li);
+    }
+  }
+  async homePLanet(char) {
+    let worldData = await fetchData(this.homeworld);
+    infoBox.classList = "";
+    if (this.homeworld === char.homeworld) {
+      infoBox.innerHTML = `<h3>Did You Know?</h3>
+      <p>${this.name} and ${char.name} are from the same planet?!<br>
+      It is the ${worldData.name}</p>`;
+    } else {
+      let charWorldData = await fetchData(char.homeworld);
+      infoBox.innerHTML = `<h3>Did You Know?</h3>
+      <p>${this.name} and ${char.name} are from different planets?!<br>
+      ${this.name} is from ${worldData.name}, but
+      ${char.name} is from ${charWorldData.name}!
+      The more you know!</p>`;
+    }
   }
 }
 
@@ -89,7 +135,7 @@ let isNumber = (input) => {
 
 //API-FUNCTION
 let fetchData = async (value) => {
-  let data = await fetch(`https://swapi.dev/api/${value}`);
+  let data = await fetch(value);
   let json = data.json();
   return json;
 };
@@ -111,10 +157,19 @@ let getPicture = (charValue, pictureArray) => {
 // CREATE CHARACTER
 let createCharacter = async (charValue, pictureArray, position) => {
   let picture = getPicture(charValue, pictureArray);
-  let fetchVal = `people/${charValue}/`;
+  let fetchVal = `https://swapi.dev/api/people/${charValue}/`;
   let data = await fetchData(fetchVal);
-  let { name, hair_color, height, mass, gender, skin_color, eye_color, films } =
-    data;
+  let {
+    name,
+    hair_color,
+    height,
+    mass,
+    gender,
+    skin_color,
+    eye_color,
+    films,
+    homeworld,
+  } = data;
   let newChar = new Character(
     position,
     name,
@@ -125,24 +180,10 @@ let createCharacter = async (charValue, pictureArray, position) => {
     skin_color,
     eye_color,
     films,
-    picture.url
+    picture.url,
+    homeworld
   );
   return newChar;
-};
-
-// PRINT INFORMATION ON DOM - !!UNUSED!!
-let printInfo = (character, element, id) => {
-  element.innerHTML = `
-      <li>input from id:${id}</li>
-      <li>Hair: ${character.hair}</li>
-      <li>Height: ${character.height}</li>
-      <li>Weight: ${character.mass}</li>
-      <li>Gender: ${character.gender}</li>
-      <li>Skin: ${character.skin}</li>
-      <li>Eyes: ${character.eyes}</li>
-      <li>Movies: ${character.films.length}</li>
-    `;
-  element.classList = "";
 };
 
 // CAPITALIZE FIRST LETTER
@@ -181,11 +222,19 @@ let testTwo = new Character(
   "assets/Chewbacca.png"
 );
 
+// CREATE AND APPEND BTN-ELEMENT
+let createAndAppendBtn = (element, btnName) => {
+  let btn = document.createElement("button");
+  btn.textContent = btnName;
+  element.append(btn);
+  return btn;
+};
+
 // CREATE AND APPEND LI-ELEMENT
 let createAndAppendLi = (character, pos, element) => {
   element.innerHTML = "";
   Object.entries(character).forEach(([key, value]) => {
-    if (!["name", "pictureUrl", "relativePos"].includes(key)) {
+    if (!["name", "pictureUrl", "relativePos", "homeworld"].includes(key)) {
       let li = document.createElement("li");
       li.id = `${key}${pos}`;
       if (key === "films") {
@@ -211,10 +260,9 @@ let createAndAppendLi = (character, pos, element) => {
 // showNameImg(testImgTwo, nameTwo, imgTwo);
 // createAndAppendLi(testTwo, 2, ulTwo);
 
-// COMPARE ARRAYS
+// COMPARE AND PRINT
 let compareValues = (obj1, obj2) => {
   infoBox.classList = "";
-  console.log(comparisonData);
   let { tallest, heaviest, filmComp, gender, hair, skin } = comparisonData;
   infoBox.innerHTML = `<h3>Hey Kids! Let's compare!</h3>
   <p>${tallest.name} is longest.<br>
@@ -321,6 +369,7 @@ compareBtn.addEventListener("click", () => {
 // 1
 charOne.addEventListener("change", async () => {
   infoBox.classList = "hidden";
+  btnsOne.innerHTML = "";
   let allLi = document.querySelectorAll("#infoTwo li");
   clearClasses(allLi);
   ulOne.classList = "hidden";
@@ -329,11 +378,24 @@ charOne.addEventListener("change", async () => {
   one = await createCharacter(charOne.value, pictures, 1);
   createAndAppendLi(one, 1, ulOne);
   console.log(one);
+  let firstMovie = createAndAppendBtn(btnsOne, "1");
+  let sharedFilms = createAndAppendBtn(btnsOne, "2");
+  let homeworld = createAndAppendBtn(btnsOne, "3");
+  firstMovie.addEventListener("click", async () => {
+    await one.firstAppearance();
+  });
+  sharedFilms.addEventListener("click", async () => {
+    await one.printSharedFilms(two);
+  });
+  homeworld.addEventListener("click", async () => {
+    await one.homePLanet(two);
+  });
   return one;
 });
 // 2
 charTwo.addEventListener("change", async () => {
   infoBox.classList = "hidden";
+  btnsTwo.innerHTML = "";
   let allLi = document.querySelectorAll("#infoOne li");
   clearClasses(allLi);
   ulTwo.classList = "hidden";
@@ -342,5 +404,17 @@ charTwo.addEventListener("change", async () => {
   two = await createCharacter(charTwo.value, pictures, 2);
   createAndAppendLi(two, 2, ulTwo);
   console.log(two);
+  let firstMovie = createAndAppendBtn(btnsTwo, "1");
+  let sharedFilms = createAndAppendBtn(btnsTwo, "2");
+  let homeworld = createAndAppendBtn(btnsTwo, "3");
+  firstMovie.addEventListener("click", async () => {
+    await two.firstAppearance();
+  });
+  sharedFilms.addEventListener("click", async () => {
+    await two.printSharedFilms(one);
+  });
+  homeworld.addEventListener("click", async () => {
+    await two.homePLanet(one);
+  });
   return two;
 });

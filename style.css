@@ -12,6 +12,25 @@ main div {
   flex-direction: row;
   justify-content: space-between;
 }
+.info-list {
+  list-style-type: none;
+  text-align: center;
+}
+.method-btns {
+  margin: 1rem 2px;
+  padding: 1rem 0;
+  border: groove 2px rgb(192, 192, 192);
+  justify-content: space-between;
+}
+#btnsOne {
+}
+#btnsTwo {
+}
+.method-btns div {
+  display: flex;
+  width: 40%;
+  justify-content: space-evenly;
+}
 @font-face {
   font-family: StarJedi;
   src: url("assets/starjedi.ttf");
@@ -42,6 +61,7 @@ section p {
   text-align: center;
 }
 h3 {
+  font-family: StarJedi;
   text-align: center;
 }
 h2 {
