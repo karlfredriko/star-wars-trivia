@@ -32,6 +32,17 @@ article {
 }
 section {
   margin: 0 3rem;
+  padding: 0 2rem;
+  border: double 4px black;
+  border-radius: 4px;
+  width: fit-content;
+  align-self: center;
+}
+section p {
+  text-align: center;
+}
+h3 {
+  text-align: center;
 }
 h2 {
   margin: 0 1rem 1rem 1rem;
@@ -72,9 +83,6 @@ fieldset {
 /* TEXT-COLOR-CLASSES */
 .red {
   color: red;
-}
-.orange {
-  color: orange;
 }
 .green {
   color: green;

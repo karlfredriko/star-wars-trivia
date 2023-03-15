@@ -10,6 +10,7 @@ let imgTwo = document.querySelector("#imgTwo");
 let ulOne = document.querySelector("#infoOne");
 let ulTwo = document.querySelector("#infoTwo");
 let compareBtn = document.querySelector("#compareBtn");
+let infoBox = document.querySelector("#information");
 
 //GLOBALS
 let one = {};
@@ -212,18 +213,17 @@ let createAndAppendLi = (character, pos, element) => {
 
 // COMPARE ARRAYS
 let compareValues = (obj1, obj2) => {
-  let p = document.querySelector("#information");
+  infoBox.classList = "";
   console.log(comparisonData);
   let { tallest, heaviest, filmComp, gender, hair, skin } = comparisonData;
-  p.innerText = `
-  Hey Kids! Let's compare!
-  ${tallest.name} is longest.
-  ${heaviest.name} is heaviest.
-  ${filmComp}
-  And how similar is ${obj1.name} and ${obj2.name}? 
-  It would seem that their gender ${gender}, 
-  and the color of their hair ${hair}. 
-  Lastly, the skin color ${skin}.`;
+  infoBox.innerHTML = `<h3>Hey Kids! Let's compare!</h3>
+  <p>${tallest.name} is longest.<br>
+  ${heaviest.name} is heaviest.<br>
+  ${filmComp}<br>
+  And how similar is ${obj1.name} and ${obj2.name}?<br>
+  It would seem that their gender ${gender},<br>
+  the color of their hair ${hair}.<br>
+  And lastly, their skin color ${skin}.</p>`;
 };
 
 function createComparisonData(obj1, obj2) {
@@ -237,7 +237,10 @@ function createComparisonData(obj1, obj2) {
     hair: isSame(obj1.hair, obj2.hair),
     skin: isSame(obj1.skin, obj2.skin),
   };
-  if (comparisonData.filmComp.includes(one.name && two.name)) {
+  if (
+    comparisonData.filmComp.includes(one.name) &&
+    comparisonData.filmComp.includes(two.name)
+  ) {
     document.getElementById(`films${one.relativePos}`).classList.add("green");
     document.getElementById(`films${two.relativePos}`).classList.add("green");
   } else if (!comparisonData.filmComp.includes(two.name)) {
@@ -268,9 +271,19 @@ function createComparisonData(obj1, obj2) {
 
 // COMPARISON FUNCTIONS
 function getLargestNumber(num1, num2) {
+  if (typeof num1 === "string") {
+    return two;
+  } else if (typeof num2 === "string") {
+    return one;
+  }
   return num1 > num2 ? one : two;
 }
 function getSmallestNumber(num1, num2) {
+  if (typeof num1 === "string") {
+    return one;
+  } else if (typeof num2 === "string") {
+    return two;
+  }
   return num1 < num2 ? one : two;
 }
 function filmComparison(num1, num2) {
@@ -298,6 +311,7 @@ compareBtn.addEventListener("click", () => {
   if ("0" === (charOne.value || charTwo.value)) {
     console.log("can't compare one or none");
   } else {
+    infoBox.classList = "hidden";
     createComparisonData(one, two);
     compareValues(one, two);
   }
@@ -306,10 +320,9 @@ compareBtn.addEventListener("click", () => {
 //SELECTION EVENTLISTENER
 // 1
 charOne.addEventListener("change", async () => {
+  infoBox.classList = "hidden";
   let allLi = document.querySelectorAll("#infoTwo li");
-  console.log("before", allLi);
   clearClasses(allLi);
-  console.log("after", allLi);
   ulOne.classList = "hidden";
   let picture = getPicture(charOne.value, pictures);
   showNameImg(picture, nameOne, imgOne);
@@ -320,6 +333,7 @@ charOne.addEventListener("change", async () => {
 });
 // 2
 charTwo.addEventListener("change", async () => {
+  infoBox.classList = "hidden";
   let allLi = document.querySelectorAll("#infoOne li");
   clearClasses(allLi);
   ulTwo.classList = "hidden";
