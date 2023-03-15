@@ -11,6 +11,11 @@ let ulOne = document.querySelector("#infoOne");
 let ulTwo = document.querySelector("#infoTwo");
 let compareBtn = document.querySelector("#compareBtn");
 
+//GLOBALS
+let one = {};
+let two = {};
+let comparisonData = {};
+
 //CHARACTER PROTOTYPE
 class Character {
   constructor(
@@ -30,7 +35,7 @@ class Character {
     this.gender = gender;
     this.height = +height ? +height : "unknown";
     this.mass = isNumber(mass);
-    this.hair = hair === "n/a" ? "none" : "none";
+    this.hair = hair === "n/a" ? "none" : hair;
     this.skin = skin;
     this.eyes = eyes;
     this.films = films;
@@ -80,8 +85,6 @@ let isNumber = (input) => {
   }
   return +result ? +result : "unknown";
 };
-
-console.log(isNumber("1,43"));
 
 //API-FUNCTION
 let fetchData = async (value) => {
@@ -158,7 +161,6 @@ let testOne = new Character(
   ["https://swapi.dev/api/films/1/", "https://swapi.dev/api/films/6/"],
   "assets/Wilhuff_Tarkin.png"
 );
-console.log(testOne);
 
 let testTwo = new Character(
   2,
@@ -177,7 +179,6 @@ let testTwo = new Character(
   ],
   "assets/Chewbacca.png"
 );
-console.log(testTwo);
 
 // CREATE AND APPEND LI-ELEMENT
 let createAndAppendLi = (character, pos, element) => {
@@ -200,56 +201,132 @@ let createAndAppendLi = (character, pos, element) => {
   element.classList = "";
 };
 
-// APPENDING TEST-CHARACTERS
-let testImgOne = getPicture(12, pictures);
-showNameImg(testImgOne, nameOne, imgOne);
-createAndAppendLi(testOne, 1, ulOne);
+// // APPENDING TEST-CHARACTERS
+// let testImgOne = getPicture(12, pictures);
+// showNameImg(testImgOne, nameOne, imgOne);
+// createAndAppendLi(testOne, 1, ulOne);
 
-let testImgTwo = getPicture(13, pictures);
-showNameImg(testImgTwo, nameTwo, imgTwo);
-createAndAppendLi(testTwo, 2, ulTwo);
+// let testImgTwo = getPicture(13, pictures);
+// showNameImg(testImgTwo, nameTwo, imgTwo);
+// createAndAppendLi(testTwo, 2, ulTwo);
 
-// COMPARE TWO CHARACTERS
-let compare = (charOne, charTwo) => {
-  let greatestOne = makeGreatestArr(charOne);
-  let greatestTwo = makeGreatestArr(charTwo);
-  console.log(charOne.name, greatestOne, charTwo.name, greatestTwo);
+// COMPARE ARRAYS
+let compareValues = (obj1, obj2) => {
+  let p = document.querySelector("#information");
+  console.log(comparisonData);
+  let { tallest, heaviest, filmComp, gender, hair, skin } = comparisonData;
+  p.innerText = `
+  Hey Kids! Let's compare!
+  ${tallest.name} is longest.
+  ${heaviest.name} is heaviest.
+  ${filmComp}
+  And how similar is ${obj1.name} and ${obj2.name}? 
+  It would seem that their gender ${gender}, 
+  and the color of their hair ${hair}. 
+  Lastly, the skin color ${skin}.`;
 };
-// MAKE ARRAYS TO COMPARE WITH
-let makeGreatestArr = (character) => {
-  let arr = [character.height, character.mass, character.films.length];
-  return arr;
-};
-let makeSameArr = (character) => {
-  let arr = [character.gender, character.hair, character.skin];
-  return arr;
+
+function createComparisonData(obj1, obj2) {
+  comparisonData = {
+    heaviest: getLargestNumber(obj1.mass, obj2.mass),
+    lightest: getSmallestNumber(obj1.mass, obj2.mass),
+    tallest: getLargestNumber(obj1.height, obj2.height),
+    shortest: getSmallestNumber(obj1.height, obj2.height),
+    filmComp: filmComparison(obj1.films.length, obj2.films.length),
+    gender: isSame(obj1.gender, obj2.gender),
+    hair: isSame(obj1.hair, obj2.hair),
+    skin: isSame(obj1.skin, obj2.skin),
+  };
+  if (comparisonData.filmComp.includes(one.name && two.name)) {
+    document.getElementById(`films${one.relativePos}`).classList.add("green");
+    document.getElementById(`films${two.relativePos}`).classList.add("green");
+  } else if (!comparisonData.filmComp.includes(two.name)) {
+    document.getElementById(`films${one.relativePos}`).classList.add("green");
+    document.getElementById(`films${two.relativePos}`).classList.add("red");
+  } else {
+    document.getElementById(`films${one.relativePos}`).classList.add("red");
+    document.getElementById(`films${two.relativePos}`).classList.add("green");
+  }
+
+  document
+    .getElementById(`mass${comparisonData.heaviest.relativePos}`)
+    .classList.add("green");
+  document
+    .getElementById(`mass${comparisonData.lightest.relativePos}`)
+    .classList.add("red");
+  document
+    .getElementById(`height${comparisonData.tallest.relativePos}`)
+    .classList.add("green");
+  document
+    .getElementById(`height${comparisonData.shortest.relativePos}`)
+    .classList.add("red");
+}
+
+// height1
+// mass1
+// films1
+
+// COMPARISON FUNCTIONS
+function getLargestNumber(num1, num2) {
+  return num1 > num2 ? one : two;
+}
+function getSmallestNumber(num1, num2) {
+  return num1 < num2 ? one : two;
+}
+function filmComparison(num1, num2) {
+  if (num1 === num2) {
+    return `${one.name} and ${two.name} have been in the same amount of films!`;
+  } else if (num1 > num2) {
+    return `${one.name} have been in the most amount of films.`;
+  } else {
+    return `${two.name} have been in the most amount of films.`;
+  }
+}
+
+function isSame(str1, str2) {
+  return str1 == str2 ? "is the same" : "is not the same";
+}
+// CYCLE CLASSES
+let clearClasses = (pos) => {
+  pos.forEach((e) => {
+    e.classList = "";
+  });
 };
 
 //COMPARE BUTTON
-compareBtn.addEventListener("click", async () => {
-  // if ("0" === (charOne.value || charTwo.value)) {
-  //   console.log("can't compare one or none");
-  // } else {
-  // }
-  compare(testOne, testTwo);
+compareBtn.addEventListener("click", () => {
+  if ("0" === (charOne.value || charTwo.value)) {
+    console.log("can't compare one or none");
+  } else {
+    createComparisonData(one, two);
+    compareValues(one, two);
+  }
 });
 
 //SELECTION EVENTLISTENER
 // 1
 charOne.addEventListener("change", async () => {
+  let allLi = document.querySelectorAll("#infoTwo li");
+  console.log("before", allLi);
+  clearClasses(allLi);
+  console.log("after", allLi);
   ulOne.classList = "hidden";
   let picture = getPicture(charOne.value, pictures);
   showNameImg(picture, nameOne, imgOne);
-  let one = await createCharacter(charOne.value, pictures, 1);
+  one = await createCharacter(charOne.value, pictures, 1);
   createAndAppendLi(one, 1, ulOne);
   console.log(one);
+  return one;
 });
 // 2
 charTwo.addEventListener("change", async () => {
+  let allLi = document.querySelectorAll("#infoOne li");
+  clearClasses(allLi);
   ulTwo.classList = "hidden";
   let picture = getPicture(charTwo.value, pictures);
   showNameImg(picture, nameTwo, imgTwo);
-  let two = await createCharacter(charTwo.value, pictures, 2);
+  two = await createCharacter(charTwo.value, pictures, 2);
   createAndAppendLi(two, 2, ulTwo);
   console.log(two);
+  return two;
 });

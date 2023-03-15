@@ -34,4 +34,10 @@ https://static.wikia.nocookie.net/starwars/images/1/12/BibFortuna-CEUEEd.png
 isGreatest(arr1, arr2) - height, mass, films.length;
 isTheSame(arr1, arr2) - gender, hair, skin;
 
+li-taggar har id efter denna syntax, tex "height1","mass2"
+
+document.querySelector(`#mass${character.relativePos}`)
+pos = character.relativePos
+li.id = `${key}${pos}`;
+
 Vem av karaktärerna som är längst. Vem som väger mest. Vem som medverkat i flest filmer. Om karaktärerna är av samma kön. Om karaktärerna har samma hårfärg. Om karaktärerna har samma hudfärg.
