@@ -15,10 +15,44 @@ let methodContainer = document.querySelector("#methodContainer");
 let btnsOne = document.querySelector("#btnsOne");
 let btnsTwo = document.querySelector("#btnsTwo");
 
-//GLOBALS
+//GLOBAL OBJECTS
 let one = {};
 let two = {};
 let comparisonData = {};
+
+//PICTURE OBJECT
+let pictures = [
+  {
+    id: 1,
+    name: "Luke Skywalker",
+    url: "assets/luke_skywalker.png",
+  },
+  {
+    id: 12,
+    name: "Wilhuff Tarkin",
+    url: "assets/Wilhuff_Tarkin.png",
+  },
+  {
+    id: 22,
+    name: "Boba Fett",
+    url: "assets/Boba_Fett.png",
+  },
+  {
+    id: 13,
+    name: "Chewbacca",
+    url: "assets/Chewbacca.png",
+  },
+  {
+    id: 16,
+    name: "Jabba Desilijic Tiure",
+    url: "assets/Jabba__the_Hut__.png",
+  },
+  {
+    id: 27,
+    name: "Ackbar",
+    url: "assets/general_ackbar.png",
+  },
+];
 
 //CHARACTER PROTOTYPE
 class Character {
@@ -92,60 +126,38 @@ class Character {
     }
   }
   async mostExpensiveVehicle() {
-    let mostExpensive = 0;
-    console.log(this.allVehicles.length, this.allVehicles);
-    for (let i = 0; i < this.allVehicles.length; i++) {
-      let cost = await fetchData(this.allVehicles[i]);
-      console.log(cost);
-      if (
-        cost.cost_in_credits > mostExpensive &&
-        cost.cost_in_credits !== "unknown"
-      ) {
-        console.log("before", mostExpensive);
-        mostExpensive = cost;
-        console.log("after", mostExpensive);
+    if (this.allVehicles.length === 0) {
+      infoBox.classList = "";
+      infoBox.innerHTML = `<h3>Did You Know?</h3>
+      <p>${this.name} don't have any vehicles!<br>
+      Tough break man!`;
+    } else {
+      let mostExpensive = 0;
+      let unknown = "";
+      for (let i = 0; i < this.allVehicles.length; i++) {
+        let vehicle = await fetchData(this.allVehicles[i]);
+        console.log(vehicle.cost_in_credits, "what type?");
+        if (vehicle.cost_in_credits === "unknown") {
+          unknown = vehicle;
+          console.log(unknown);
+        } else if (typeof +vehicle.cost_in_credits === "number") {
+          console.log(+vehicle.cost_in_credits);
+          mostExpensive = vehicle;
+        }
       }
+      infoBox.classList = "";
+      infoBox.innerHTML = `<h3>Did You Know?</h3>
+      <p>${this.name}'s most expensive vehicle is the ${
+        mostExpensive !== 0 ? mostExpensive.name : unknown.name
+      }!<br>
+      ${
+        mostExpensive !== 0
+          ? "It costs " + mostExpensive.cost_in_credits + " credits, cool"
+          : "No one knows how many credits that one costs"
+      }!</p>`;
     }
-    infoBox.classList = "";
-    infoBox.innerHTML = `<h3>Did You Know?</h3>
-      <p>${this.name}'s most expensive vehicle is the ${mostExpensive.name}!<br>
-      It costs ${mostExpensive.cost_in_credits} credits, wow!</p>`;
   }
 }
-
-//PICTURE OBJECT
-let pictures = [
-  {
-    id: 1,
-    name: "Luke Skywalker",
-    url: "assets/luke_skywalker.png",
-  },
-  {
-    id: 12,
-    name: "Wilhuff Tarkin",
-    url: "assets/Wilhuff_Tarkin.png",
-  },
-  {
-    id: 22,
-    name: "Boba Fett",
-    url: "assets/Boba_Fett.png",
-  },
-  {
-    id: 13,
-    name: "Chewbacca",
-    url: "assets/Chewbacca.png",
-  },
-  {
-    id: 16,
-    name: "Jabba Desilijic Tiure",
-    url: "assets/Jabba__the_Hut__.png",
-  },
-  {
-    id: 27,
-    name: "Ackbar",
-    url: "assets/general_ackbar.png",
-  },
-];
 
 // FORMATTING NUMBERS
 let isNumber = (input) => {
