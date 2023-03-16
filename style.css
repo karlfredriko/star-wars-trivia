@@ -18,18 +18,18 @@ main div {
 }
 .method-btns {
   margin: 1rem 2px;
-  padding: 1rem 0;
+  padding: 1rem 2rem;
   border: groove 2px rgb(192, 192, 192);
   justify-content: space-between;
 }
-#btnsOne {
-}
 #btnsTwo {
+  flex-direction: row-reverse;
 }
 .method-btns div {
   display: flex;
   width: 40%;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  gap: 2rem;
 }
 @font-face {
   font-family: StarJedi;

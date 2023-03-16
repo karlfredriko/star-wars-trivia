@@ -11,6 +11,7 @@ let ulOne = document.querySelector("#infoOne");
 let ulTwo = document.querySelector("#infoTwo");
 let compareBtn = document.querySelector("#compareBtn");
 let infoBox = document.querySelector("#information");
+let methodContainer = document.querySelector("#methodContainer");
 let btnsOne = document.querySelector("#btnsOne");
 let btnsTwo = document.querySelector("#btnsTwo");
 
@@ -32,7 +33,8 @@ class Character {
     eyes,
     films,
     pictureUrl,
-    homeworld
+    homeworld,
+    allVehicles
   ) {
     this.relativePos = relativePos;
     this.name = name;
@@ -45,6 +47,7 @@ class Character {
     this.films = films;
     this.pictureUrl = pictureUrl;
     this.homeworld = homeworld;
+    this.allVehicles = allVehicles;
   }
   async firstAppearance() {
     let filmData = await fetchData(this.films[0]);
@@ -87,6 +90,26 @@ class Character {
       ${char.name} is from ${charWorldData.name}!
       The more you know!</p>`;
     }
+  }
+  async mostExpensiveVehicle() {
+    let mostExpensive = 0;
+    console.log(this.allVehicles.length, this.allVehicles);
+    for (let i = 0; i < this.allVehicles.length; i++) {
+      let cost = await fetchData(this.allVehicles[i]);
+      console.log(cost);
+      if (
+        cost.cost_in_credits > mostExpensive &&
+        cost.cost_in_credits !== "unknown"
+      ) {
+        console.log("before", mostExpensive);
+        mostExpensive = cost;
+        console.log("after", mostExpensive);
+      }
+    }
+    infoBox.classList = "";
+    infoBox.innerHTML = `<h3>Did You Know?</h3>
+      <p>${this.name}'s most expensive vehicle is the ${mostExpensive.name}!<br>
+      It costs ${mostExpensive.cost_in_credits} credits, wow!</p>`;
   }
 }
 
@@ -169,7 +192,10 @@ let createCharacter = async (charValue, pictureArray, position) => {
     eye_color,
     films,
     homeworld,
+    vehicles,
+    starships,
   } = data;
+  let allVehicles = vehicles.concat(starships);
   let newChar = new Character(
     position,
     name,
@@ -181,7 +207,8 @@ let createCharacter = async (charValue, pictureArray, position) => {
     eye_color,
     films,
     picture.url,
-    homeworld
+    homeworld,
+    allVehicles
   );
   return newChar;
 };
@@ -191,40 +218,10 @@ function capitalize(s) {
   return s[0].toUpperCase() + s.slice(1);
 }
 
-let testOne = new Character(
-  1,
-  "Wilhuff Tarkin",
-  "male",
-  180,
-  "unknown",
-  "auburn, grey",
-  "fair",
-  "blue",
-  ["https://swapi.dev/api/films/1/", "https://swapi.dev/api/films/6/"],
-  "assets/Wilhuff_Tarkin.png"
-);
-
-let testTwo = new Character(
-  2,
-  "Chewbacca",
-  "male",
-  228,
-  112,
-  "brown",
-  "unknown",
-  "blue",
-  [
-    "https://swapi.dev/api/films/1/",
-    "https://swapi.dev/api/films/2/",
-    "https://swapi.dev/api/films/3/",
-    "https://swapi.dev/api/films/6/",
-  ],
-  "assets/Chewbacca.png"
-);
-
 // CREATE AND APPEND BTN-ELEMENT
 let createAndAppendBtn = (element, btnName) => {
   let btn = document.createElement("button");
+  methodContainer.classList = "method-btns";
   btn.textContent = btnName;
   element.append(btn);
   return btn;
@@ -234,7 +231,15 @@ let createAndAppendBtn = (element, btnName) => {
 let createAndAppendLi = (character, pos, element) => {
   element.innerHTML = "";
   Object.entries(character).forEach(([key, value]) => {
-    if (!["name", "pictureUrl", "relativePos", "homeworld"].includes(key)) {
+    if (
+      ![
+        "name",
+        "pictureUrl",
+        "relativePos",
+        "homeworld",
+        "allVehicles",
+      ].includes(key)
+    ) {
       let li = document.createElement("li");
       li.id = `${key}${pos}`;
       if (key === "films") {
@@ -250,15 +255,6 @@ let createAndAppendLi = (character, pos, element) => {
   });
   element.classList = "";
 };
-
-// // APPENDING TEST-CHARACTERS
-// let testImgOne = getPicture(12, pictures);
-// showNameImg(testImgOne, nameOne, imgOne);
-// createAndAppendLi(testOne, 1, ulOne);
-
-// let testImgTwo = getPicture(13, pictures);
-// showNameImg(testImgTwo, nameTwo, imgTwo);
-// createAndAppendLi(testTwo, 2, ulTwo);
 
 // COMPARE AND PRINT
 let compareValues = (obj1, obj2) => {
@@ -381,6 +377,7 @@ charOne.addEventListener("change", async () => {
   let firstMovie = createAndAppendBtn(btnsOne, "1");
   let sharedFilms = createAndAppendBtn(btnsOne, "2");
   let homeworld = createAndAppendBtn(btnsOne, "3");
+  let vehicle = createAndAppendBtn(btnsOne, "4");
   firstMovie.addEventListener("click", async () => {
     await one.firstAppearance();
   });
@@ -389,6 +386,9 @@ charOne.addEventListener("change", async () => {
   });
   homeworld.addEventListener("click", async () => {
     await one.homePLanet(two);
+  });
+  vehicle.addEventListener("click", async () => {
+    await one.mostExpensiveVehicle();
   });
   return one;
 });
@@ -407,6 +407,7 @@ charTwo.addEventListener("change", async () => {
   let firstMovie = createAndAppendBtn(btnsTwo, "1");
   let sharedFilms = createAndAppendBtn(btnsTwo, "2");
   let homeworld = createAndAppendBtn(btnsTwo, "3");
+  let vehicle = createAndAppendBtn(btnsTwo, "4");
   firstMovie.addEventListener("click", async () => {
     await two.firstAppearance();
   });
@@ -415,6 +416,9 @@ charTwo.addEventListener("change", async () => {
   });
   homeworld.addEventListener("click", async () => {
     await two.homePLanet(one);
+  });
+  vehicle.addEventListener("click", async () => {
+    await two.mostExpensiveVehicle();
   });
   return two;
 });

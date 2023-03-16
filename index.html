@@ -23,7 +23,7 @@
             <option value="16">Jabba Desilijic Tiure</option>
             <option value="27">General Ackbar</option>
           </select>
-          <button id="compareBtn">Compare</button>
+          <button id="compareBtn">Compare Stats</button>
           <select id="charSelectTwo">
             <option selected hidden value="0">Choose a character</option>
             <option value="1">Luke Skywalker</option>
@@ -36,20 +36,14 @@
         </fieldset>
       </header>
       <main>
-        <div class="method-btns">
-          <div id="btnsOne">
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-          </div>
-          <div id="btnsTwo">
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>4</button>
-          </div>
-        </div>
+        <fieldset id="methodContainer" class="method-btns hidden">
+          <legend>
+            Select a Method: 1.First Movie | 2.Shared Movies | 3.Home World |
+            4.Expensive Vehicle
+          </legend>
+          <div id="btnsOne"></div>
+          <div id="btnsTwo"></div>
+        </fieldset>
         <div>
           <article id="one">
             <h2 id="nameOne">unkown</h2>
